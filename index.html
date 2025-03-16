@@ -343,7 +343,7 @@
                     <p>𓍯 اللفات/فولت: ${turnsPerVolt.toFixed(2)}</p>
                 </div>
                 <div class="specs-section">
-                    <h3>𓋼 الملف الابتدائي</h3>
+                    <h3>𓋼 الملف الابتدائي (${primaryVoltage}V)</h3>
                     <p>𓇻 عدد اللفات: ${primaryTurns}</p>
                     <p>𓃠 التيار: ${primaryCurrent}A</p>
                     <p class="wire-details">𓏲 سمك السلك: ${primaryWire} مم</p>
@@ -365,11 +365,10 @@
 
                 resultHTML += `
                     <div class="specs-section">
-                        <h3>𓋼 الملف الثانوي ${index + 1}</h3>
-                        <p>𓇼 الجهد: ${secVoltage}V</p>
+                        <h3>𓋼 الملف الثانوي ${index + 1} (${secVoltage}V)</h3>
                         <p>𓇻 عدد اللفات: ${secTurns}</p>
                         <p>𓃠 التيار: ${secCurrent}A</p>
-                        <p class="wire-details">𓏲 سم�� السلك: ${secWire} مم</p>
+                        <p class="wire-details">𓏲 سمك السلك: ${secWire} مم</p>
                         ${ctValue === 'yes' ? `
                             <div style="color:var(--accent); margin-top:10px;">
                                 𓍝 تفاصيل السنتر تاب:
