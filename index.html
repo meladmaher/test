@@ -1,37 +1,61 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PWA Test</title>
+
+  <!-- manifest.json -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#000000">
-</head>
-<body>
-  <h1>تجربة PWA</h1>
-  <button id="notifyBtn">إرسال إشعار بعد دقيقتين</button>
+  <meta name="theme-color" content="#317EFB"/>
 
-  <script>
-    // تسجيل Service Worker
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("sw.js")
-        .then(() => console.log("SW Registered"));
-    }
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-messaging.js";
 
-    // زر الإشعار
-    document.getElementById("notifyBtn").addEventListener("click", () => {
-      Notification.requestPermission().then(permission => {
-        if (permission === "granted") {
-          setTimeout(() => {
-            navigator.serviceWorker.ready.then(reg => {
-              reg.showNotification("🚀 تجربة إشعار", {
-                body: "الإشعار ظهر بعد دقيقتين ✅",
-                icon: "icon.png"
-              });
-            });
-          }, 120000); // 120000 ms = 2 دقيقة
-        }
-      });
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDeibHwPuJzTH7X_MO4xwFYzgT_7CzTpOs",
+      authDomain: "pwatest-dc72b.firebaseapp.com",
+      projectId: "pwatest-dc72b",
+      storageBucket: "pwatest-dc72b.firebasestorage.app",
+      messagingSenderId: "711518836965",
+      appId: "1:711518836965:web:d886d212e176fd79449c0c",
+      measurementId: "G-FXMB6ZHYNG"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const messaging = getMessaging(app);
+
+    // طلب إذن الإشعارات
+    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        console.log("Notifications allowed ✅");
+        getToken(messaging, { vapidKey: "BJcnwdqGDBXP8gYnPPcn_2d7qsbHEvhiB8kWJ0UmXL30vyhOcdVc4Nau6LFOL4sQ-u23E3xuXgC1fYo8dfgi-Bk" })
+          .then((currentToken) => {
+            if (currentToken) {
+              console.log("FCM Token:", currentToken);
+            } else {
+              console.log("No registration token available.");
+            }
+          })
+          .catch((err) => {
+            console.log("An error occurred while retrieving token. ", err);
+          });
+      }
+    });
+
+    // استقبال إشعار والتطبيق مفتوح
+    onMessage(messaging, (payload) => {
+      console.log("Message received. ", payload);
+      alert("📩 إشعار جديد: " + payload.notification.title);
     });
   </script>
+</head>
+<body>
+  <h1>🚀 أهلاً بك في PWA + Firebase</h1>
+  <p>جرّب تثبيت التطبيق على الموبايل واستقبال إشعارات.</p>
 </body>
 </html>
